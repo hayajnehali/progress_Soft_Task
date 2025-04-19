@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using BusinessCardInformation.Core.IRepositorys;
 using BusinessCardInformation.Core.IServices;
+using BusinessCardInformation.Core.Models.Request;
 
 namespace BusinessCardInformation.Infra.Services
 {
-    public class BaseServices<TEntity, TModel> : IBaseServices<TModel> where TEntity : class where TModel : class
+    public class BaseServices<TEntity, TModel> : IBaseServices<TModel> where TEntity : class where TModel : class 
     {
         readonly IBaseRepository<TEntity> _repository;
         private readonly IMapper _mapper;
@@ -19,14 +20,22 @@ namespace BusinessCardInformation.Infra.Services
         public async Task<TModel> GetById(int id)
         {
             var entity = await _repository.GetById(id);
-            return _mapper.Map<TModel>(entity);
-
+            return _mapper.Map<TModel>(entity); 
+        }
+        public async Task Delete(int id)
+        {
+             await _repository.Delete(id); 
         }
 
-        public async Task<List<TModel>> GetAll()
+        public async Task<ModelBaseFilter<TModel>> GetAll(ModelBaseFilter<TModel> filter)
         {
-            var query = await _repository.GetAll();
-            return _mapper.Map<List<TModel>>(query); ;
+            var filterEntity = new ModelBaseFilter<TEntity>();
+            filterEntity.PageSize = filter.PageSize; ;
+            filterEntity.PageIndex = filter.PageIndex;
+            var query = await _repository.GetAll(filterEntity);
+            filter.Collection= _mapper.Map<List<TModel>>(query.Collection);
+
+            return filter;
         }
         public async Task<TModel> Create(TModel model)
         {
@@ -36,8 +45,7 @@ namespace BusinessCardInformation.Infra.Services
             return _mapper.Map<TModel>(entity); ;
         }
         public async Task Update(TModel entity)
-        {
-            //  await _repository.Update(entity);
+        { 
             var item = _mapper.Map<TEntity>(entity); ;
             await _repository.Update(item);
         }

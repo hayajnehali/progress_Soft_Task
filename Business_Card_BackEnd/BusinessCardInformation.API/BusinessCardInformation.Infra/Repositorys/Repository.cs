@@ -1,15 +1,16 @@
 ﻿
 
 using BusinessCardInformation.Core.IRepositorys;
+using BusinessCardInformation.Core.Models.Request;
 using BusinessCardInformation.Infra.ApplicationDbContext;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace ResturantWebSite.Core.Repositorys
+namespace BusinessCardInformation.Core.Repositorys
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        readonly AppDbContext _dbContext; 
+        readonly AppDbContext _dbContext;
         public BaseRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -21,9 +22,11 @@ namespace ResturantWebSite.Core.Repositorys
             return result;
         }
 
-        public async Task<List<T>> GetAll()
+        public async Task<ModelBaseFilter<T>> GetAll(ModelBaseFilter<T> modelBaseFilter)
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            var filter = new ModelBaseFilter<T>(); 
+            filter.Collection = await _dbContext.Set<T>().ToListAsync();
+            return filter;
         }
 
         public IQueryable<T> Query()

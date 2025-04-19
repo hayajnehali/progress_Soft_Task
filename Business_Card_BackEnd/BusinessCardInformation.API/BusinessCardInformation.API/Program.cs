@@ -1,11 +1,11 @@
 using BusinessCardInformation.Core.IRepositorys;
 using BusinessCardInformation.Core.IServices;
 using BusinessCardInformation.Core.Mapper;
+using BusinessCardInformation.Core.Repositorys;
 using BusinessCardInformation.Infra.ApplicationDbContext;
 using BusinessCardInformation.Infra.Services;
 using FluentAssertions.Common;
-using Microsoft.EntityFrameworkCore;
-using ResturantWebSite.Core.Repositorys;
+using Microsoft.EntityFrameworkCore; 
 
 var builder = WebApplication.CreateBuilder(args);
 

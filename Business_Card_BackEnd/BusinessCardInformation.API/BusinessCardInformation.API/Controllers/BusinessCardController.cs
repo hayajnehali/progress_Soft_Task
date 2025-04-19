@@ -22,49 +22,47 @@ namespace ResturantWebSite.API.Controllers
         {
            // await _baseServices.Create(productModule);
             var result = await _baseServices.Create(productModule);
-            if (result ==null)
-                return Ok();
-            return BadRequest(result);
+            if (result ==null) 
+                return BadRequest(result);
+            return Ok(result);
         }
 
-        //[HttpPut]
-        //[Route("update")]
-        //public async Task<IActionResult> Update([FromBody] ProductModul productModule)
-        //{
-        //    productModule.UpdateBy = GetUserId();
-        //    productModule.UpdateStamp = DateTime.Now;
-        //    await _productServices.DeleteImage(productModule);
-        //    await _baseServices.Update(productModule);
-        //    return Ok(); 
-        //}
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody] BusinessCardDTO businessCardDTO)
+        { 
+            await _baseServices.Update(businessCardDTO);
+            return Ok();
+        }
 
 
-        //[HttpGet]
-        //[Route("getAll")]
-        //public async Task< OperationResult<List<ProductModul>>> GetAll([FromQuery] ProductFilterModul productFilterModul)
-        //{ 
-        //    return await _productServices.GetAll(productFilterModul); 
-        //}
+        [HttpGet]
+        [Route("getAll")]
+        public async Task<IActionResult> GetAll([FromQuery] BusinessCardFilter businessCardFilter)
+        {
+          var result= await _baseServices.GetAll(businessCardFilter);
+            return Ok(result);
+        }
 
-        //[HttpGet]
-        //[Route("getById/{id}")]
-        //public async Task<IActionResult> GetById(int id)
-        //{
-            
-        //    var item= await _productServices.GetById(id);
-        //    if(item==null)
-        //        return NotFound();
-        //    return Ok( item);
-        //}
+        [HttpGet]
+        [Route("getById/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
 
-        //[HttpDelete]
-        //[Route("delete/{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var result = await _productServices.Delete(id);
-        //    if (result.Success)
-        //        return Ok(result);
-        //    return BadRequest(result);
-        //}
+            var item = await _baseServices.GetById(id);
+            if (item == null)
+                return NotFound();
+            return Ok(item);
+        }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _baseServices.Delete(id);
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result);
+        }
     }
 }
