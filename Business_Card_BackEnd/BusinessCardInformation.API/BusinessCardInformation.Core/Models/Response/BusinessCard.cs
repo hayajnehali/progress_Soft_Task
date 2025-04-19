@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace BusinessCardInformation.Core.Models.Response
 {
-    public class BusinessCard: EntityBase
-    {
+    public class BusinessCard
+    { 
+        public int BusinessCardId { get; set; }
+
         [Required]
         public string Name { get; set; }
 
