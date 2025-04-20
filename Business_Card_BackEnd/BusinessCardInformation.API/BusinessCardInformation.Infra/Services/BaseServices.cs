@@ -22,9 +22,9 @@ namespace BusinessCardInformation.Infra.Services
             var entity = await _repository.GetById(id);
             return _mapper.Map<TModel>(entity); 
         }
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-             await _repository.Delete(id); 
+            return await _repository.Delete(id); 
         }
 
         public async Task<ModelBaseFilter<TModel>> GetAll(ModelBaseFilter<TModel> filter)

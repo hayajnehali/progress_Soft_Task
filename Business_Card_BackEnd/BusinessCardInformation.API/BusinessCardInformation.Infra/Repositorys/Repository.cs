@@ -16,6 +16,22 @@ namespace BusinessCardInformation.Core.Repositorys
             _dbContext = dbContext;
         }
 
+        public async Task<bool> Delete(int id)
+        {
+            var entity = await _dbContext.Set<T>().FindAsync(id);
+
+            if (entity == null)
+            {
+                return false;
+            }
+
+            _dbContext.Set<T>().Remove(entity);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+
         public async Task<T> GetById(int id)
         {
             T result = await _dbContext.Set<T>().FindAsync(id);
@@ -24,7 +40,7 @@ namespace BusinessCardInformation.Core.Repositorys
 
         public async Task<ModelBaseFilter<T>> GetAll(ModelBaseFilter<T> modelBaseFilter)
         {
-            var filter = new ModelBaseFilter<T>(); 
+            var filter = new ModelBaseFilter<T>();
             filter.Collection = await _dbContext.Set<T>().ToListAsync();
             return filter;
         }

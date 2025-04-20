@@ -21,6 +21,7 @@ namespace BusinessCardInformation.Core.Models.Request
     {
         public int PageSize { get; set; } = 5;
         public int PageIndex { get; set; } = 1;
+        public int TotalNumberOf { get; set; } = 0;
         public List<T>? Collection { get; set; }
     
     }

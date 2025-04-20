@@ -60,7 +60,7 @@ namespace ResturantWebSite.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _baseServices.Delete(id);
-            if (result.Success)
+            if (result)
                 return Ok(result);
             return BadRequest(result);
         }

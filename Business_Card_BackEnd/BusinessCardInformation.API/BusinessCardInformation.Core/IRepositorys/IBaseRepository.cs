@@ -8,7 +8,7 @@ namespace BusinessCardInformation.Core.IRepositorys
     {
 
         Task<T?> GetById(int id);
-        Task Delete(int id);
+        Task<bool> Delete(int id);
         Task<ModelBaseFilter<T>> GetAll(ModelBaseFilter<T> filter);
         IQueryable<T> Query();
         Task<T> Create(T entity);
