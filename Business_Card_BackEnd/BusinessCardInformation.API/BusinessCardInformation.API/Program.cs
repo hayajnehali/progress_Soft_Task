@@ -1,11 +1,11 @@
 using BusinessCardInformation.Core.IRepositorys;
 using BusinessCardInformation.Core.IServices;
 using BusinessCardInformation.Core.Mapper;
+using BusinessCardInformation.Core.Repositorys;
 using BusinessCardInformation.Infra.ApplicationDbContext;
 using BusinessCardInformation.Infra.Services;
 using FluentAssertions.Common;
-using Microsoft.EntityFrameworkCore;
-using ResturantWebSite.Core.Repositorys;
+using Microsoft.EntityFrameworkCore; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Register DbContext with SQL Server provider
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBLocalConnection"), d => d.MigrationsAssembly("BusinessCardInformation.API")));
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 
 // add services and repositories registration
@@ -38,7 +48,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -25,7 +25,7 @@ namespace BusinessCardInformation.Core.Mapper
                 IsBase64String(src.Photo)
                     ? Convert.FromBase64String(src.Photo)
                     : null
-            ));
+            )); 
 
         }
         private static bool IsBase64String(string base64)

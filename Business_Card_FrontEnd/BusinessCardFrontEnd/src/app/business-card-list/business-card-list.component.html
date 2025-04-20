@@ -1,0 +1,74 @@
+<div class="container row"> 
+      <h3 style="color: #6badff;">Business Card List</h3>
+      <div class="btnEnd col-12" style="text-align: end;">
+        <!-- <button class="btn btn-primary animate__animated animate__fadeIn" (click)="goToAdd()">Add Business Card</button> -->
+
+        <button [routerLink]="['/manage']">Add Business Card</button>
+
+
+    </div>
+    <div class=" col-8 box" *ngIf="dataSource.data.length>0">
+      <table mat-table [dataSource]="dataSource" class="mat-table">
+  
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let card">{{ card.name }}</td>
+        </ng-container>
+  
+        <!-- Gender Column -->
+        <ng-container matColumnDef="gender">
+          <th mat-header-cell *matHeaderCellDef>Gender</th>
+          <td mat-cell *matCellDef="let card">{{ card.gender }}</td>
+        </ng-container>
+  
+        <!-- DOB Column -->
+        <ng-container matColumnDef="dob">
+          <th mat-header-cell *matHeaderCellDef>DOB</th>
+          <td mat-cell *matCellDef="let card">{{ card.dateOfBirth | date }}</td>
+        </ng-container>
+  
+        <!-- Email Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let card">{{ card.email }}</td>
+        </ng-container>
+  
+        <!-- Phone Column -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>Phone</th>
+          <td mat-cell *matCellDef="let card">{{ card.phone }}</td>
+        </ng-container>
+  
+        <!-- Photo Column -->
+        <ng-container matColumnDef="photo">
+          <th mat-header-cell *matHeaderCellDef>Photo</th>
+          <td mat-cell *matCellDef="let card">
+            <img [src]="card.photo" alt="Photo" width="40" height="40" *ngIf="card.photo">
+          </td>
+        </ng-container>
+  
+        <!-- Address Column -->
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef>Address</th>
+          <td mat-cell *matCellDef="let card">{{ card.address }}</td>
+        </ng-container>
+    
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let card">
+            <div style="    width: 14px;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator [length]="totalNumberOf" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"> </mat-paginator>
+    </div>
+</div>
+  

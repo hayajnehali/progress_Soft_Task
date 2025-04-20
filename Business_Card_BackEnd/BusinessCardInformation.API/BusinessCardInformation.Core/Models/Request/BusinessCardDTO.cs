@@ -19,5 +19,11 @@ namespace BusinessCardInformation.Core.Models.Request
          
         public string Photo { get; set; } 
         public string Address { get; set; }
+
+    }
+    public class BusinessCardFilter : ModelBaseFilter<BusinessCardDTO>
+    {
+        public int? BusinessCardId { get; set; }
+        public string? Name { get; set; }
     }
 }

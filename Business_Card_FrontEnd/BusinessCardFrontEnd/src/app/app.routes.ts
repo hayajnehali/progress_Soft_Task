@@ -1,3 +1,8 @@
-import { Routes } from '@angular/router';
+import { Routes } from '@angular/router';  
+import { BusinessCardManageComponent } from './business-card-manage/business-card-manage.component';
+import { BusinessCardListComponent } from './business-card-list/business-card-list.component';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+    { path: '', component: BusinessCardListComponent },
+    { path: 'manage', component: BusinessCardManageComponent }
+];

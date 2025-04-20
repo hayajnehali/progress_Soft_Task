@@ -17,10 +17,12 @@ namespace BusinessCardInformation.Core.Models.Request
             UpdateStamp = DateTime.UtcNow; // Set to current UTC time
         }
     }
-    public abstract class ModelBaseFilter
+    public class ModelBaseFilter<T> where T : class
     {
         public int PageSize { get; set; } = 5;
         public int PageIndex { get; set; } = 1;
+        public int TotalNumberOf { get; set; } = 0;
+        public List<T>? Collection { get; set; }
     
     }
 }
