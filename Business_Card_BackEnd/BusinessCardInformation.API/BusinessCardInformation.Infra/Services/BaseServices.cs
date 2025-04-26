@@ -5,13 +5,13 @@ using BusinessCardInformation.Core.Models.Request;
 
 namespace BusinessCardInformation.Infra.Services
 {
-    public class BaseServices<TEntity, TModel> : IBaseServices<TModel> where TEntity : class where TModel : class
+    public class BaseServices<TEntity, TModel, TFilter> : IBaseServices<TModel, TFilter> where TEntity : class where TModel : class where TFilter : class
     {
-        readonly IBaseRepository<TEntity> _repository;
+        readonly IBaseRepository<TEntity, TFilter> _repository;
         private readonly IMapper _mapper;
 
 
-        public BaseServices(IBaseRepository<TEntity> repository, IMapper mapper)
+        public BaseServices(IBaseRepository<TEntity, TFilter> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -27,15 +27,13 @@ namespace BusinessCardInformation.Infra.Services
             return await _repository.Delete(id);
         }
 
-        public async Task<ModelBaseFilter<TModel>> GetAll(ModelBaseFilter<TModel> filter)
-        {
-            var filterEntity = new ModelBaseFilter<TEntity>();
-            filterEntity.PageSize = filter.PageSize; ;
-            filterEntity.PageIndex = filter.PageIndex;
-            var query = await _repository.GetAll(filterEntity);
-            filter.Collection = _mapper.Map<List<TModel>>(query.Collection);
-
-            return filter;
+        public async Task<PageResult<TModel>> GetAll(TFilter filter)
+        { 
+            var result = new PageResult<TModel>(); 
+            var query = await _repository.GetAll(filter);
+            result.Collection = _mapper.Map<List<TModel>>(query.Collection); 
+            result.TotalNumberOf =query.TotalNumberOf; 
+            return result;
         }
         public async Task<TModel> Create(TModel model)
         {

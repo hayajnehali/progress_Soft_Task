@@ -7,17 +7,58 @@
           </button>  
 
           <button (click)="exportAllAsSingleQR()" mat-raised-button color="primary" >Generate As QR</button>
-
           <div *ngIf="qrImageUrl"> 
             <img [src]="qrImageUrl" width="60px" alt="QR Code for All Records" /> 
             <a [href]="qrImageUrl" download="business-card-qr.png">
               <button mat-raised-button color="primary">Download QR Code</button>
             </a>
-          </div>
-          
-          
+          </div>         
         </div> 
     </div>
+
+    <form #businessCardForm="ngForm" (ngSubmit)="getBusinessCardList()" class="business-card-form form"> 
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput name="name" [(ngModel)]="filter.name">
+      </mat-form-field>
+    
+      <mat-form-field appearance="outline">
+        <mat-label>Gender</mat-label>
+        <mat-select name="gender" [(ngModel)]="filter.gender">
+          <mat-option value="Male">Male</mat-option>
+          <mat-option value="Female">Female</mat-option>
+          <mat-option value="Other">Other</mat-option>
+        </mat-select>
+      </mat-form-field> 
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput name="dateOfBirth" [matDatepicker]="picker" [(ngModel)]="filter.date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+     
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput name="email" [(ngModel)]="filter.email" type="email">
+      </mat-form-field>
+    
+      <mat-form-field appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input matInput name="phone" [(ngModel)]="filter.phone">
+      </mat-form-field>
+      
+    
+      <div class="form-actions" style="text-align: end;margin: 0px 13px;">
+          <button mat-raised-button color="primary" type="submit" >
+           Search
+          </button>
+          <button mat-button type="button" (click)="onReset()" style="margin: 0px 5px;">Reset</button>
+        </div>
+      
+      </form>
+  
+
     <div class=" col-8 box" *ngIf="dataSource.data.length>0">
       <table mat-table [dataSource]="dataSource" class="mat-table">
   
@@ -78,7 +119,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table> 
-      <mat-paginator [length]="totalNumberOf" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"> </mat-paginator>
+      <mat-paginator [length]="totalNumberOf" (page)="pageChanged($event)" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"> </mat-paginator>
     </div>
 </div>
   

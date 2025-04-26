@@ -4,7 +4,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table'; //
 import { CommonModule } from '@angular/common';
 import { BusinessCardService } from '../../services/business-card.service';
 import { HttpClientModule } from '@angular/common/http';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input'; 
 import * as QRCode from 'qrcode';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-business-card-list',
@@ -23,14 +24,14 @@ import * as QRCode from 'qrcode';
     MatPaginatorModule,
     MatTableModule,
     RouterModule,
-      FormsModule, 
-      MatFormFieldModule,   
-      MatSelectModule, 
-      MatNativeDateModule,
-      MatButtonModule,
-      ReactiveFormsModule, 
-      MatInputModule,
-      MatButtonModule],
+    FormsModule, 
+    MatFormFieldModule,   
+    MatSelectModule, 
+    MatNativeDateModule,
+    MatButtonModule,
+    ReactiveFormsModule, 
+    MatInputModule,    
+    MatDatepickerModule],
   templateUrl: './business-card-list.component.html',
   styleUrl: './business-card-list.component.scss'
 })
@@ -41,6 +42,7 @@ export class BusinessCardListComponent implements OnInit {
   totalNumberOf: number = 0;
   cards: BusinessCard[] = [];
   qrImageUrl: string = '';
+  filter:BusinessCardFilter=new BusinessCardFilter();
  constructor(private businessCardService:BusinessCardService){
   this.dataSource = new MatTableDataSource(this.cards);
   }
@@ -51,15 +53,18 @@ export class BusinessCardListComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator; 
   }
-  goToAdd() {
-    throw new Error('Method not implemented.');
+  onReset() {
+    this.filter=new BusinessCardFilter();
+    this.getBusinessCardList()
     }
   getBusinessCardList(){
-    this.businessCardService.getAll(new BusinessCardFilter()).subscribe(
+    this.filter.dateOfBirth= this.filter.date?.toISOString()
+    this.businessCardService.getAll(this.filter).subscribe(
       (req)=>{
         this.dataSource.data=req.collection
-        this.dataSource.paginator = this.paginator; 
         this.totalNumberOf=req.totalNumberOf
+    //    this.dataSource.paginator = this.paginator; 
+    
       })
     }
     delete(item:BusinessCard){
@@ -91,5 +96,9 @@ export class BusinessCardListComponent implements OnInit {
           });
       }
 
-
+      pageChanged(event: PageEvent) {
+        this.filter.pageIndex = event.pageIndex + 1;
+        this.filter.pageSize = event.pageSize;
+        this.getBusinessCardList();
+      }
 }

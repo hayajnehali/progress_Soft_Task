@@ -1,5 +1,6 @@
 ﻿
 
+using AutoMapper;
 using BusinessCardInformation.Core.IRepositorys;
 using BusinessCardInformation.Core.Models.Request;
 using BusinessCardInformation.Infra.ApplicationDbContext;
@@ -8,9 +9,11 @@ using System.Linq.Expressions;
 
 namespace BusinessCardInformation.Core.Repositorys
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T,TFilter> : IBaseRepository<T, TFilter> where T : class where TFilter : class
     {
-        readonly AppDbContext _dbContext;
+        readonly AppDbContext _dbContext; 
+
+
         public BaseRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -38,11 +41,11 @@ namespace BusinessCardInformation.Core.Repositorys
             return result;
         }
 
-        public async Task<ModelBaseFilter<T>> GetAll(ModelBaseFilter<T> modelBaseFilter)
-        {
-            var filter = new ModelBaseFilter<T>();
-            filter.Collection = await _dbContext.Set<T>().ToListAsync();
-            return filter;
+        public virtual async Task<PageResult<T>> GetAll(TFilter baseFilter)
+        { 
+            var result =new PageResult<T>();
+            result.Collection = await _dbContext.Set<T>().ToListAsync();
+            return result;
         }
 
         public IQueryable<T> Query()

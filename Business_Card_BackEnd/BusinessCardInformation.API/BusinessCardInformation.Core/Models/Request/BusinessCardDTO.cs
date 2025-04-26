@@ -21,9 +21,12 @@ namespace BusinessCardInformation.Core.Models.Request
         public string Address { get; set; }
 
     }
-    public class BusinessCardFilter : ModelBaseFilter<BusinessCardDTO>
-    {
-        public int? BusinessCardId { get; set; }
+    public class BusinessCardFilter : BaseFilter
+    { 
         public string? Name { get; set; }
+        public string? Gender { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; } 
     }
 }

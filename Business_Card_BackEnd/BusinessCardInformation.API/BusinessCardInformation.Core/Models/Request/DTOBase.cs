@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace BusinessCardInformation.Core.Models.Request
 {
     public abstract class DTOBase
@@ -13,16 +15,23 @@ namespace BusinessCardInformation.Core.Models.Request
 
         protected DTOBase()
         {
-            CreateStamp = DateTime.UtcNow; // Set to current UTC time
-            UpdateStamp = DateTime.UtcNow; // Set to current UTC time
+            CreateStamp = DateTime.UtcNow;
+            UpdateStamp = DateTime.UtcNow;
         }
     }
-    public class ModelBaseFilter<T> where T : class
+    public class BaseFilter
     {
         public int PageSize { get; set; } = 5;
-        public int PageIndex { get; set; } = 1;
+        public int PageIndex { get; set; } = 1; 
+
+    }
+    
+    public class PageResult<T> where T : class
+    { 
         public int TotalNumberOf { get; set; } = 0;
         public List<T>? Collection { get; set; }
+        public List<string>? Error { get; set; }
     
     }
+
 }

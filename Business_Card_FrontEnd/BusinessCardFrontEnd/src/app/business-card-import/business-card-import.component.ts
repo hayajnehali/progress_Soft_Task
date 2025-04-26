@@ -87,7 +87,9 @@ export class BusinessCardImportComponent {
   }
  
   submitData() { 
-    this.previewData.forEach(x=>x.businessCardId=0)
+    this.previewData.forEach((x)=>{
+      x.businessCardId=0; 
+    })
         this.businessCardService.createBulk(this.previewData).subscribe({
           next:(req)=>alert('Data submitted successfully!'),
           error: (err) => alert('Error submitting data: ' + err.message)
