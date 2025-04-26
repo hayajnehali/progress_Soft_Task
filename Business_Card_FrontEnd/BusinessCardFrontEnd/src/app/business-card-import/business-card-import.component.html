@@ -1,10 +1,14 @@
 
 <div class="container row"> 
     <h3 style="color: #6badff;">Import Business Cards</h3> 
-    <div class="btnEnd col-12">   
-        <mat-label style="font-size: 11px;">Upload File (CSV or XML)   </mat-label> 
+    <div class="btnEnd col-12" style="margin-bottom: 6px;">   
+        <mat-label style="font-size: 11px;">Upload File (CSV or XML)</mat-label> 
         <input type="file" id="uplode" (change)="onFileSelected($event)" accept=".csv,.xml" />
     
+  </div>
+  <div class="btnEnd col-12">    
+    <mat-label style="font-size: 11px;">Upload Qr Code</mat-label> 
+      <input type="file" (change)="onFileChange($event)" accept="image/*" /> 
   </div>
 <!-- Preview table -->
 <div > 

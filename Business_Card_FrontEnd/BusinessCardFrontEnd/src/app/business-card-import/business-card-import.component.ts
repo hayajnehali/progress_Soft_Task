@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { BrowserMultiFormatReader } from '@zxing/library';
 
 @Component({
   selector: 'app-business-card-import',
@@ -38,8 +39,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
   styleUrl: './business-card-import.component.scss'
 })  
 export class BusinessCardImportComponent {
-  previewData: any[] = [];
+  previewData: BusinessCard[] = [];
   previewHeaders: string[] = [];   
+  scannedResult: string = ''; 
+  private codeReader = new BrowserMultiFormatReader();
   constructor(private http: HttpClient,private businessCardService:BusinessCardService) {}
 
   onFileSelected(event: any) {
@@ -67,7 +70,7 @@ export class BusinessCardImportComponent {
       header: true,
       skipEmptyLines: true,
       complete: (result) => {
-        this.previewData = result.data; 
+        this.previewData = result.data as BusinessCard[]; 
         this.previewHeaders = Object.keys(this.previewData[0]);
       }
     });
@@ -83,12 +86,49 @@ export class BusinessCardImportComponent {
     });
   }
  
-  submitData() {
-      console.log('Submitted Business Card:', this.previewData); 
+  submitData() { 
+    this.previewData.forEach(x=>x.businessCardId=0)
         this.businessCardService.createBulk(this.previewData).subscribe({
           next:(req)=>alert('Data submitted successfully!'),
           error: (err) => alert('Error submitting data: ' + err.message)
         }) 
   }
+
+
+  // Function to scan the QR code from an image or video stream
+  scanQRCodeFromImage(file: File) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const imageElement = new Image();
+      imageElement.src = e.target.result;
+      imageElement.onload = () => { 
+        this.codeReader.decodeFromImage(imageElement)
+          .then(result => { 
+           const rawData = result.getText(); 
+           const parsedList: BusinessCard[] = JSON.parse(rawData); 
+           this.previewData = parsedList.map(card => ({
+             ...card,
+             dateOfBirth: card.dateOfBirth ? new Date(card.dateOfBirth) : undefined
+           })); 
+           this.previewHeaders = Object.keys(this.previewData[0] || {});
+
+          })
+          .catch(err => {
+            console.error('QR code scan error: ', err);
+          });
+      };
+    };
+    reader.readAsDataURL(file); 
+  }
+
+  // Function to handle file input for QR code scanning
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.scanQRCodeFromImage(file);
+    }
+  }
+
+
 }
 
