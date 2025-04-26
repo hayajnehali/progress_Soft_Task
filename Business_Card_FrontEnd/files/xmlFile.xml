@@ -1,0 +1,22 @@
+<Root>
+  <Record>
+    <BusinessCardId>0</BusinessCardId>
+    <Name>John Doe</Name>
+    <Gender>Male</Gender>
+    <DateOfBirth>1985-06-15</DateOfBirth>
+    <Email>john.doe@example.com</Email>
+    <Phone>+1-123-456-7890</Phone>
+    <Photo>johndoe.jpg</Photo>
+    <Address>123 Main Street, Cityville, USA</Address>
+  </Record>
+  <Record>
+    <BusinessCardId>0</BusinessCardId>
+    <Name>Jane Smith</Name>
+    <Gender>Female</Gender>
+    <DateOfBirth>1990-09-25</DateOfBirth>
+    <Email>jane.smith@example.com</Email>
+    <Phone>+1-987-654-3210</Phone>
+    <Photo>janesmith.jpg</Photo>
+    <Address>456 Elm Street, Townsville, USA</Address>
+  </Record>
+</Root>

@@ -64,5 +64,16 @@ namespace ResturantWebSite.API.Controllers
                 return Ok(result);
             return BadRequest(result);
         }
+
+        [HttpPost]
+        [Route("create-bulk")]
+        public async Task<IActionResult> CreateBulk([FromBody] List<BusinessCardDTO> productModule)
+        {
+            // await _baseServices.Create(productModule);
+            var result = await _baseServices.CreateBulk(productModule);
+            if (result == null)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

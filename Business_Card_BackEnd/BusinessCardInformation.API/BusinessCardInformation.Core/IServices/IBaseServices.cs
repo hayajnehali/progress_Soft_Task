@@ -10,6 +10,7 @@ namespace BusinessCardInformation.Core.IServices
         Task<bool> Delete(int id);
         Task<ModelBaseFilter<T>> GetAll(ModelBaseFilter<T> filter); 
         Task<T> Create(T entity);
+        Task<List<T>> CreateBulk(List<T> entity);
         Task Update(T entity); 
     }
 }

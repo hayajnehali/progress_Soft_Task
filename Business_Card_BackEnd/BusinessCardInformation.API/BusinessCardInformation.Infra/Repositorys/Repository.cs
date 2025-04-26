@@ -65,6 +65,21 @@ namespace BusinessCardInformation.Core.Repositorys
             }
 
         }
+        public async Task<List<T>> CreateBulk(List<T> entities)
+        {
+            try
+            {
+                _dbContext.Set<T>().AddRange(entities);
+                await _dbContext.SaveChangesAsync();
+                return entities;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
         public async Task Update(T entity)
         {
             _dbContext.Set<T>().Update(entity);

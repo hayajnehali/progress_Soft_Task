@@ -12,6 +12,7 @@ namespace BusinessCardInformation.Core.IRepositorys
         Task<ModelBaseFilter<T>> GetAll(ModelBaseFilter<T> filter);
         IQueryable<T> Query();
         Task<T> Create(T entity);
+        Task<List<T>> CreateBulk(List<T> entity);
         Task Update(T entity);
         Task SaveChangesAsync();
     }
