@@ -1,0 +1,38 @@
+
+<div class="container row"> 
+    <h3 style="color: #6badff;">Import Business Cards</h3> 
+    <div class="btnEnd col-12" style="margin-bottom: 6px;">   
+        <mat-label style="font-size: 11px;">Upload File (CSV or XML)</mat-label> 
+        <input type="file" id="uplode" (change)="onFileSelected($event)" accept=".csv,.xml" />
+    
+  </div>
+  <div class="btnEnd col-12">    
+    <mat-label style="font-size: 11px;">Upload Qr Code</mat-label> 
+      <input type="file" (change)="onFileChange($event)" accept="image/*" /> 
+  </div>
+<!-- Preview table -->
+<div > 
+    <div *ngIf="previewData.length > 0" style="margin-top: 20px;">
+      <h5 style="color: #6badff;">Preview Data</h5> 
+      <table mat-table [dataSource]="previewData" class="mat-elevation-z8" style="width: 100%;">
+    
+        <!-- Dynamic columns -->
+        <ng-container *ngFor="let column of previewHeaders" [matColumnDef]="column">
+          <th mat-header-cell *matHeaderCellDef> {{ column }} </th>
+          <td mat-cell *matCellDef="let element"> 
+            <img *ngIf="element[column]&& column=='Photo'" [src]="element[column]"  alt="Image preview" width="50">   
+            <span *ngIf=" column!='Photo'">  {{ element[column] }} </span>
+          </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="previewHeaders"></tr>
+        <tr mat-row *matRowDef="let row; columns: previewHeaders;"></tr>
+    
+      </table>
+    </div>
+    <div class="form-actions" *ngIf="previewData.length > 0" style="padding-top: 11px;text-align: end;">
+        <button  (click)="submitData()" mat-raised-button color="primary">Submit</button>   
+      </div>  
+  </div> 
+  
+</div>

@@ -1,6 +1,8 @@
 using BusinessCardInformation.Core.IRepositorys;
 using BusinessCardInformation.Core.IServices;
 using BusinessCardInformation.Core.Mapper;
+using BusinessCardInformation.Core.Models.Request;
+using BusinessCardInformation.Core.Models.Response;
 using BusinessCardInformation.Core.Repositorys;
 using BusinessCardInformation.Infra.ApplicationDbContext;
 using BusinessCardInformation.Infra.Services;
@@ -26,8 +28,11 @@ builder.Services.AddCors(options =>
 
 
 // add services and repositories registration
+
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
-builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
+//builder.Services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
+builder.Services.AddScoped<IBaseRepository<BusinessCard, BusinessCardFilter>, BusinessCardRepo>();
 builder.Services.AddScoped<IBusinessCardRepository, BusinessCardRepo>();
 builder.Services.AddScoped<IBusinessCardServices, BusinessCardServices>();
 

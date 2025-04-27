@@ -13,14 +13,12 @@ export class BusinessCard {
   
 
   export class BusinessCardFilter extends PaginatedResult<BusinessCard> { 
-    name: string | undefined;
-    businessCardId: number | undefined;
-    // gender: string;
-    // dateOfBirth: Date;
-    // email: string;
-    // phone: string;
-    // photo: string;
-    // address: string;
+    name: string | undefined; 
+    gender: string | undefined;
+    dateOfBirth: string | undefined;   
+    date: Date | undefined;
+    email: string | undefined;
+    phone: string | undefined; 
   }
   
   

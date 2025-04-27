@@ -1,4 +1,69 @@
-<p>business-card-manage works!</p>
 
-<button [routerLink]="['./manage']">Go to Contact</button>
+<div class="container">
+    <h3 style="color: #6badff;">Business Card Manage</h3>
+  <div class="btnEnd col-12" style="text-align: end;"> 
+    <div class="form-actions"> 
+      <button [routerLink]="['../import']" mat-raised-button color="primary" >
+        Import Business Card
+      </button>  
+    </div> 
+</div> 
+    <form #businessCardForm="ngForm" (ngSubmit)="onSubmit(businessCardForm)" class="business-card-form form"> 
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput name="name" [(ngModel)]="card.name" required>
+    </mat-form-field>
+  
+    <mat-form-field appearance="outline">
+      <mat-label>Gender</mat-label>
+      <mat-select name="gender" [(ngModel)]="card.gender">
+        <mat-option value="Male">Male</mat-option>
+        <mat-option value="Female">Female</mat-option>
+        <mat-option value="Other">Other</mat-option>
+      </mat-select>
+    </mat-form-field> 
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Date of Birth</mat-label>
+      <input matInput name="dateOfBirth" [matDatepicker]="picker" [(ngModel)]="card.dateOfBirth">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+   
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput name="email" [(ngModel)]="card.email" type="email" required>
+    </mat-form-field>
+  
+    <mat-form-field appearance="outline">
+      <mat-label>Phone</mat-label>
+      <input matInput name="phone" [(ngModel)]="card.phone">
+    </mat-form-field> 
+  
+   <div style="border: 1px solid #000;border-radius: 3px;margin: 10px 0px;padding: 8px 10px;">
+    <mat-label>Upload Photo</mat-label>
+    <input type="file" (change)="onFileSelected($event)" accept="image/*">  
+    <img *ngIf="card.photo" [src]="card.photo" alt="Image preview" width="50">   
+  </div> 
 
+  
+   <mat-form-field appearance="outline">
+      <mat-label>Address</mat-label>
+      <textarea matInput name="address" [(ngModel)]="card.address" rows="3"></textarea>
+    </mat-form-field>
+  
+    <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!businessCardForm.form.valid">
+          Submit
+        </button>
+        <button mat-button type="button" (click)="onReset()">Reset</button>
+      </div>
+    
+    </form>
+
+  <div class="form-actions">
+    <button [routerLink]="['./manage']" mat-raised-button color="primary" >
+      Back
+    </button>  
+  </div>
+</div>

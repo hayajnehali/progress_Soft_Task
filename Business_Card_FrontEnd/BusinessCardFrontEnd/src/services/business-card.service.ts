@@ -48,11 +48,10 @@ export class BusinessCardService {
   create(item: BusinessCard): Observable<BusinessCard> {
     return this.http.post<BusinessCard>(this.baseUrl+"/create", item)
   }
-  // create(item: T): Observable<T> {
-  //   return this.http.post<T>(this.baseUrl+"/create", item).pipe(
-  //     catchError(this.handleError<T>('create'))
-  //   );
-  // }
+
+  createBulk(items:BusinessCard[]): Observable<BusinessCard[]> {
+    return this.http.post<BusinessCard[]>(this.baseUrl+"/create-bulk", items)
+  } 
 
   update(item: BusinessCard): Observable<BusinessCard> {
     return this.http.put<BusinessCard>(`${this.baseUrl}/update`, item)
