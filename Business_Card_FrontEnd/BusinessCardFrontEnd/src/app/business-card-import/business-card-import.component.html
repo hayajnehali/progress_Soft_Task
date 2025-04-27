@@ -1,38 +1,78 @@
 
 <div class="container row"> 
-    <h3 style="color: #6badff;">Import Business Cards</h3> 
-    <div class="btnEnd col-12" style="margin-bottom: 6px;">   
-        <mat-label style="font-size: 11px;">Upload File (CSV or XML)</mat-label> 
-        <input type="file" id="uplode" (change)="onFileSelected($event)" accept=".csv,.xml" />
-    
-  </div>
-  <div class="btnEnd col-12">    
-    <mat-label style="font-size: 11px;">Upload Qr Code</mat-label> 
-      <input type="file" (change)="onFileChange($event)" accept="image/*" /> 
-  </div>
-<!-- Preview table -->
-<div > 
-    <div *ngIf="previewData.length > 0" style="margin-top: 20px;">
-      <h5 style="color: #6badff;">Preview Data</h5> 
-      <table mat-table [dataSource]="previewData" class="mat-elevation-z8" style="width: 100%;">
-    
-        <!-- Dynamic columns -->
-        <ng-container *ngFor="let column of previewHeaders" [matColumnDef]="column">
-          <th mat-header-cell *matHeaderCellDef> {{ column }} </th>
-          <td mat-cell *matCellDef="let element"> 
-            <img *ngIf="element[column]&& column=='Photo'" [src]="element[column]"  alt="Image preview" width="50">   
-            <span *ngIf=" column!='Photo'">  {{ element[column] }} </span>
-          </td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="previewHeaders"></tr>
-        <tr mat-row *matRowDef="let row; columns: previewHeaders;"></tr>
-    
-      </table>
+      <h3 style="color: #6badff;">Import Business Cards</h3> 
+      <div class="btnEnd col-12" style="margin-bottom: 6px;">   
+          <mat-label style="font-size: 11px;">Upload File (CSV or XML)</mat-label> 
+          <input type="file" id="uplode" (change)="onFileSelected($event)" accept=".csv,.xml" />
+      
     </div>
-    <div class="form-actions" *ngIf="previewData.length > 0" style="padding-top: 11px;text-align: end;">
-        <button  (click)="submitData()" mat-raised-button color="primary">Submit</button>   
-      </div>  
-  </div> 
+    <div class="btnEnd col-12">    
+      <mat-label style="font-size: 11px;">Upload Qr Code</mat-label> 
+        <input type="file" (change)="onFileChange($event)" accept="image/*" /> 
+    </div>
+       <!-- Preview table -->
+    <div>  
+      <div class=" col-8 box" *ngIf="dataSource.data.length>0">
+        <div style="margin-top: 20px;">
+          <h5 style="color: #6badff;">Preview Data</h5> 
+        </div>
+        <table mat-table [dataSource]="dataSource" class="mat-table">
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let card">{{ card.name }}</td>
+          </ng-container>
+
+          <!-- Gender Column -->
+          <ng-container matColumnDef="gender">
+            <th mat-header-cell *matHeaderCellDef>Gender</th>
+            <td mat-cell *matCellDef="let card">{{ card.gender }}</td>
+          </ng-container>
+
+          <!-- DOB Column -->
+          <ng-container matColumnDef="dob">
+            <th mat-header-cell *matHeaderCellDef>DOB</th>
+            <td mat-cell *matCellDef="let card">{{ card.dateOfBirth | date }}</td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let card">{{ card.email }}</td>
+          </ng-container>
+
+          <!-- Phone Column -->
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Phone</th>
+            <td mat-cell *matCellDef="let card">{{ card.phone }}</td>
+          </ng-container>
+
+          <!-- Photo Column -->
+          <ng-container matColumnDef="photo">
+            <th mat-header-cell *matHeaderCellDef>Photo</th>
+            <td mat-cell *matCellDef="let card">
+              <!-- <img [src]="card.photo" alt="Photo" width="40" height="40" *ngIf="card.photo"> -->
+              <img *ngIf="card.photo" [src]="card.photo" alt="Image preview" width="50">   
+
+            </td>
+          </ng-container>
+
+          <!-- Address Column -->
+          <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef>Address</th>
+            <td mat-cell *matCellDef="let card">{{ card.address }}</td>
+          </ng-container> 
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table> 
+      </div> 
+      <div class="form-actions" style="padding-top: 11px;text-align: end;">
+          <button   *ngIf="dataSource.data.length > 0" (click)="submitData()" mat-raised-button color="primary">Submit</button>   
+          <button [routerLink]="['../']" mat-raised-button color="primary" style="margin-left: 5px;" >
+            Back
+          </button>  
+      </div>   
+    </div> 
   
 </div>

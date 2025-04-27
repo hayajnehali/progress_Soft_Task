@@ -7,7 +7,8 @@ import { BusinessCard, BusinessCardFilter } from '../model/BusinessCard';
 @Injectable({
   providedIn: 'root'
 }) 
-export class BusinessCardService { 
+export class BusinessCardService {
+
   protected baseUrl:string="https://localhost:44315/api/"
   
   constructor(protected http: HttpClient) {
@@ -69,6 +70,9 @@ export class BusinessCardService {
       return of(result as BusinessCard);
     };
   }
+  uploadFile(formData: FormData) {
+    return this.http.post<BusinessCard[]>(this.baseUrl+"/upload", formData)
+  } 
 }
 
 

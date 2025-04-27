@@ -1,8 +1,12 @@
 ﻿using BusinessCardInformation.Core.IServices;
 using BusinessCardInformation.Core.Models.Request;
+using BusinessCardInformation.Core.Models.Response;
+using CsvHelper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.Xml.Serialization;
 
 namespace ResturantWebSite.API.Controllers
 {
@@ -75,5 +79,52 @@ namespace ResturantWebSite.API.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            string extension = Path.GetExtension(file.FileName).ToLower();
+
+            using var reader = new StreamReader(file.OpenReadStream());
+            string content = await reader.ReadToEndAsync();
+
+            List<BusinessCardDTO> cards = extension switch
+            {
+                ".csv" => ParseCsv(content),
+                ".xml" => ParseXml(content),
+                _ => throw new Exception("Unsupported format")
+            };
+
+            return Ok(cards); // Or store/save to DB etc.
+        }
+
+        private List<BusinessCardDTO> ParseXml(string xmlContent)
+        {
+            var serializer = new XmlSerializer(typeof(List<BusinessCardDTO>), new XmlRootAttribute("BusinessCards"));
+            using var reader = new StringReader(xmlContent);
+            return (List<BusinessCardDTO>)serializer.Deserialize(reader);
+        }
+
+        private List<BusinessCardDTO> ParseCsv(string csvContent)
+        {
+            try
+            {
+                var records = new List<BusinessCardDTO>();
+                using var reader = new StringReader(csvContent);
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+                records = csv.GetRecords<BusinessCardDTO>().ToList();
+                return records;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
     }
 }

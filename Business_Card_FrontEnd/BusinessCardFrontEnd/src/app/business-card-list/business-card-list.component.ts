@@ -86,7 +86,12 @@ export class BusinessCardListComponent implements OnInit {
 
 
       exportAllAsSingleQR() { 
-        const jsonData = JSON.stringify(this.dataSource.data); 
+        let data = this.dataSource.data.map(x => ({
+          ...x,
+          photo: ""
+        }));
+        
+        const jsonData = JSON.stringify(data); 
         QRCode.toDataURL(jsonData)
           .then(url => { 
             this.qrImageUrl = url;
