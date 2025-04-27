@@ -92,7 +92,7 @@ export class BusinessCardListComponent implements OnInit {
             this.qrImageUrl = url;
           })
           .catch(err => {
-            console.error('Failed to generate QR:', err);
+            alert('Failed to generate QR:' + err.message) 
           });
       }
 
