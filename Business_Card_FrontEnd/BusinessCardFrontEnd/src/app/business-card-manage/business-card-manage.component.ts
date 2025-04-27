@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,7 +31,7 @@ import { BusinessCard } from '../../model/BusinessCard';
   styleUrl: './business-card-manage.component.scss'
 })
 export class BusinessCardManageComponent implements OnInit {
- constructor(private businessCardService:BusinessCardService){ 
+ constructor(private businessCardService:BusinessCardService,private router:Router){ 
   }
 
   ngOnInit(): void {  
@@ -55,6 +55,7 @@ export class BusinessCardManageComponent implements OnInit {
           next:(req)=>{ 
             alert('Data submitted successfully!');
             this.card=req
+            this.router.navigate(['../']);
           },
           error: (err) => alert('Error submitting data: ' + err.message)
           }) 
@@ -70,7 +71,12 @@ export class BusinessCardManageComponent implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        this.card.photo = reader.result as string;
+      //  this.card.photo = reader.result as string;
+
+        const fullDataUrl = reader.result as string;
+        const base64 = fullDataUrl.split(',')[1];
+        this.card.photo = base64;
+
       };
       reader.readAsDataURL(file);
     }

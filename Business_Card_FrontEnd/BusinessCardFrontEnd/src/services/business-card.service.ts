@@ -73,6 +73,49 @@ export class BusinessCardService {
   uploadFile(formData: FormData) {
     return this.http.post<BusinessCard[]>(this.baseUrl+"/upload", formData)
   } 
+
+  // exportToXML(filterCriteria: BusinessCardFilter) {
+  //   let params = new HttpParams(); 
+  //   Object.keys(filterCriteria).forEach(key => {
+  //     const value = filterCriteria[key as keyof BusinessCardFilter];
+      
+  //     if (value !== undefined && value !== null) {
+  //       params = params.append(key, String(value));  
+  //     }
+  //   });
+
+  //   return this.http.get<BusinessCardFilter>(this.baseUrl+"/export/xml", { params })   .pipe(
+  //     catchError(err => {
+  //       console.error('Error occurred:', err);
+  //       return throwError(err);
+  //     })
+  //   );
+  // }
+
+  exportToXML(filterCriteria: BusinessCardFilter): Observable<Blob> { 
+    let params = new HttpParams(); 
+    Object.keys(filterCriteria).forEach(key => {
+      const value = filterCriteria[key as keyof BusinessCardFilter];
+      
+      if (value !== undefined && value !== null) {
+        params = params.append(key, String(value)); 
+      }
+    }); 
+    return this.http.get(`${this.baseUrl}/export/xml`, { params: params, responseType: 'blob' });
+  }
+  
+  exportToCSV(filterCriteria: BusinessCardFilter): Observable<Blob> { 
+        let params = new HttpParams(); 
+        Object.keys(filterCriteria).forEach(key => {
+          const value = filterCriteria[key as keyof BusinessCardFilter];
+          
+          if (value !== undefined && value !== null) {
+            params = params.append(key, String(value)); 
+          }
+        }); 
+    return this.http.get(`${this.baseUrl}/export/csv`, { params: params, responseType: 'blob' });
+  }
+
 }
 
 

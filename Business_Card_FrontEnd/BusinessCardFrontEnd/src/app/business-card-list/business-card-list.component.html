@@ -4,8 +4,10 @@
         <div class="form-actions">
           <button [routerLink]="['./manage']"  class="my-2" mat-raised-button color="primary" >
             Add Business Card
-          </button>  
-
+          </button>   
+            <button (click)="exportToCSV()" class="my-2" mat-raised-button color="primary">Export to CSV</button>
+            <button (click)="exportToXML()" class="my-2" mat-raised-button color="primary">Export to XML</button>
+ 
           <button (click)="exportAllAsSingleQR()" mat-raised-button color="primary" >Generate As QR</button>
           <div *ngIf="qrImageUrl"> 
             <img [src]="qrImageUrl" width="60px" alt="QR Code for All Records" /> 
@@ -97,7 +99,7 @@
           <th mat-header-cell *matHeaderCellDef>Photo</th>
           <td mat-cell *matCellDef="let card">
             <!-- <img [src]="card.photo" alt="Photo" width="40" height="40" *ngIf="card.photo"> -->
-            <img *ngIf="card.photo" [src]="card.photo" alt="Image preview" width="50">   
+            <img *ngIf="card.photo" [src]="'data:image/jpeg;base64,'+card.photo" alt="Image preview" width="50">   
 
           </td>
         </ng-container>

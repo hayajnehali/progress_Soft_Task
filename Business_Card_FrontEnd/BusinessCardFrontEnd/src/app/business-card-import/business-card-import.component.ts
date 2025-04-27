@@ -42,7 +42,7 @@ export class BusinessCardImportComponent {
   scannedResult: string = ''; 
   selectedFile: File | null = null;
   private codeReader = new BrowserMultiFormatReader();
-  displayedColumns: string[] = ['name','gender','dob','email','phone','photo','address'];
+  displayedColumns: string[] = ['name','gender','dob','email','phone','address','photo'];
   dataSource = new MatTableDataSource<BusinessCard>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;  
     

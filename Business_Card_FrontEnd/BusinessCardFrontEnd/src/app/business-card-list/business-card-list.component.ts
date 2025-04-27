@@ -106,4 +106,39 @@ export class BusinessCardListComponent implements OnInit {
         this.filter.pageSize = event.pageSize;
         this.getBusinessCardList();
       }
+
+
+
+// Export to CSV
+  exportToCSV() { 
+    this.businessCardService.exportToCSV(this.filter).subscribe(
+      (response) => {
+        // Handle the CSV download logic here
+        const blob = new Blob([response], { type: 'text/csv' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'business_cards.csv';  // Provide a name for the downloaded file
+        link.click();  // Trigger the download
+      },
+      (error) => {
+        console.error('Error exporting to CSV:', error);
+      }
+    );
+}
+exportToXML() { 
+  this.businessCardService.exportToXML(this.filter).subscribe(
+    (response) => {
+      // Handle the CSV download logic here
+      const blob = new Blob([response], { type: 'text/xml' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'business_cards.xml';  // Provide a name for the downloaded file
+      link.click();  // Trigger the download
+    },
+    (error) => {
+      console.error('Error exporting to xml:', error);
+    }
+  );
+}
+ 
 }
