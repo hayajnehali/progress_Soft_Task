@@ -37,7 +37,8 @@ namespace BusinessCardInformation.Infra.Services
         }
         public async Task<TModel> Create(TModel model)
         {
-            var item = _mapper.Map<TEntity>(model); ;
+            var item = _mapper.Map<TEntity>(model);
+            
             var entity = await _repository.Create(item);
 
             return _mapper.Map<TModel>(entity); ;

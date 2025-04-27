@@ -38,14 +38,16 @@
     <mat-form-field appearance="outline">
       <mat-label>Phone</mat-label>
       <input matInput name="phone" [(ngModel)]="card.phone">
-    </mat-form-field>
+    </mat-form-field> 
   
-    <mat-form-field appearance="outline">
-      <mat-label>Photo URL</mat-label>
-      <input matInput name="photo" [(ngModel)]="card.photo">
-    </mat-form-field>
+   <div style="border: 1px solid #000;border-radius: 3px;margin: 10px 0px;padding: 8px 10px;">
+    <mat-label>Upload Photo</mat-label>
+    <input type="file" (change)="onFileSelected($event)" accept="image/*">  
+    <img *ngIf="card.photo" [src]="card.photo" alt="Image preview" width="50">   
+  </div> 
+
   
-    <mat-form-field appearance="outline">
+   <mat-form-field appearance="outline">
       <mat-label>Address</mat-label>
       <textarea matInput name="address" [(ngModel)]="card.address" rows="3"></textarea>
     </mat-form-field>

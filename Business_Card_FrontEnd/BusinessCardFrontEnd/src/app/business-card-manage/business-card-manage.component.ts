@@ -17,14 +17,14 @@ import { BusinessCard } from '../../model/BusinessCard';
   imports: [
     FormsModule,
     CommonModule,
-    RouterModule, 
+    RouterModule,
+    MatInputModule, 
     MatFormFieldModule,   
     MatDatepickerModule,
     MatSelectModule, 
     MatNativeDateModule,
     MatButtonModule,
     ReactiveFormsModule, 
-    MatInputModule,
     MatButtonModule,   
     ],
   templateUrl: './business-card-manage.component.html',
@@ -63,6 +63,17 @@ export class BusinessCardManageComponent implements OnInit {
   
   onReset() {
     this.card = new BusinessCard();
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.card.photo = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
   }
   
 }

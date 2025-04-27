@@ -3,6 +3,7 @@ using BusinessCardInformation.Core.Models.Request;
 using BusinessCardInformation.Core.Models.Response;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,12 +19,12 @@ namespace BusinessCardInformation.Core.Mapper
                 opt.MapFrom(src =>
                     src.Photo == null
                         ? null
-                        : Convert.ToBase64String(src.Photo)
-                ));
+                        : ToBase64String(src.Photo)
+                )); 
             CreateMap<BusinessCardDTO, BusinessCard>()
             .ForMember(dest => dest.Photo, opt => opt.MapFrom(src =>
                 IsBase64String(src.Photo)
-                    ? Convert.FromBase64String(src.Photo)
+                    ? FromBase64String(src.Photo)
                     : null
             )); 
 
@@ -32,10 +33,25 @@ namespace BusinessCardInformation.Core.Mapper
         {
             if (string.IsNullOrWhiteSpace(base64))
                 return false;
-
-            Span<byte> buffer = new Span<byte>(new byte[base64.Length]);
-            return Convert.TryFromBase64String(base64, buffer, out _);
+            return true;
         }
+        
+        private static byte[] FromBase64String(string str)
+        { 
+            byte[] byt = new byte[str.Length]; 
+            for (int i = 0; i < str.Length; i++)
+            {
+                byt[i] = Convert.ToByte(str[i]);
+            }
+            return byt;
+        }
+        
+        private static string ToBase64String(byte[] str)
+        {
+            string byt = System.Text.Encoding.UTF8.GetString(str);
+            return byt;
+        }
+
 
     }
 }
