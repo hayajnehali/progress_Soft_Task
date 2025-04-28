@@ -26,7 +26,8 @@ namespace ResturantWebSite.API.Controllers
         [Route("create")]
         public async Task<IActionResult> Create([FromBody] BusinessCardDTO productModule)
         {
-           // await _baseServices.Create(productModule);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState); 
             var result = await _baseServices.Create(productModule);
             if (result ==null) 
                 return BadRequest(result);
@@ -109,23 +110,40 @@ namespace ResturantWebSite.API.Controllers
         [HttpGet("export/csv")]
         public async Task<IActionResult> ExportToCSV([FromQuery] BusinessCardFilter businessCardFilter)
         {
-            var result = await _baseServices.GetAll(businessCardFilter);
-            var businessCards = result.Collection; 
-
-            var csvBuilder = new StringBuilder();
-            var header = "BusinessCardId,Name,Gender,DateOfBirth,Email,Phone,Photo,Address";
-            csvBuilder.AppendLine(header);
-
-            foreach (var card in businessCards)
+            // Validate the filter if necessary
+            if (businessCardFilter == null)
             {
-                csvBuilder.AppendLine($"{card.BusinessCardId},{card.Name},{card.Gender},{card.DateOfBirth:yyyy-MM-dd},{card.Email},{card.Phone},{card.Photo},{card.Address}");
+                return BadRequest("Invalid filter parameters.");
+            }
+            try
+            {
+
+                var result = await _baseServices.GetAll(businessCardFilter);
+                var businessCards = result.Collection;
+                if (businessCards.Count == 0)
+                    return NoContent();
+                var csvBuilder = new StringBuilder();
+                var header = "BusinessCardId,Name,Gender,DateOfBirth,Email,Phone,Photo,Address";
+                csvBuilder.AppendLine(header);
+
+                foreach (var card in businessCards)
+                {
+                    csvBuilder.AppendLine($"{card.BusinessCardId},{card.Name},{card.Gender},{card.DateOfBirth:yyyy-MM-dd},{card.Email},{card.Phone},{card.Photo},{card.Address}");
+                }
+
+                var csvContent = csvBuilder.ToString();
+                var byteArray = Encoding.UTF8.GetBytes(csvContent);
+                var stream = new MemoryStream(byteArray);
+                Response.Headers.Add("Content-Disposition", "attachment; filename=business_cards.csv");
+                return File(stream, "text/csv");
+            }
+            catch (Exception)
+            { 
+                return StatusCode(500, "An error occurred while processing your request.");
+
+                throw;
             }
 
-            var csvContent = csvBuilder.ToString();
-            var byteArray = Encoding.UTF8.GetBytes(csvContent);
-            var stream = new MemoryStream(byteArray); 
-            Response.Headers.Add("Content-Disposition", "attachment; filename=business_cards.csv");
-            return File(stream, "text/csv");
         }
          
         // Export data as XML
