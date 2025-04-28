@@ -8,7 +8,7 @@
       </button>  
     </div> 
 </div> 
-    <form #businessCardForm="ngForm" (ngSubmit)="onSubmit(businessCardForm)" class="business-card-form form"> 
+  <form #businessCardForm="ngForm" (ngSubmit)="onSubmit(businessCardForm)" class="business-card-form form"> 
     <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
       <input matInput name="name" [(ngModel)]="card.name" required>
@@ -43,7 +43,7 @@
    <div style="border: 1px solid #000;border-radius: 3px;margin: 10px 0px;padding: 8px 10px;">
     <mat-label>Upload Photo</mat-label>
     <input type="file" (change)="onFileSelected($event)" accept="image/*">  
-    <img *ngIf="card.photo" [src]="card.photo" alt="Image preview" width="50">   
+    <img *ngIf="card.photo" [src]="'data:image/jpeg;base64,'+card.photo" alt="Image preview" width="50">   
   </div> 
 
   
@@ -52,17 +52,17 @@
       <textarea matInput name="address" [(ngModel)]="card.address" rows="3"></textarea>
     </mat-form-field>
   
-    <div class="form-actions">
+    <div class="form-actions" style="text-align: end;">
         <button mat-raised-button color="primary" type="submit" [disabled]="!businessCardForm.form.valid">
           Submit
         </button>
         <button mat-button type="button" (click)="onReset()">Reset</button>
-      </div>
+    </div>
     
-    </form>
+  </form>
 
-  <div class="form-actions">
-    <button [routerLink]="['./manage']" mat-raised-button color="primary" >
+  <div class="form-actions" style="text-align: end;">
+    <button [routerLink]="['../']" mat-raised-button color="primary" >
       Back
     </button>  
   </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'; 
+import { Component, ViewChild } from '@angular/core'; 
 import * as Papa from 'papaparse';
 import * as xml2js from 'xml2js';
 import { HttpClient } from '@angular/common/http'; 
@@ -9,7 +9,7 @@ import { BusinessCardService } from '../../services/business-card.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
@@ -38,66 +38,30 @@ import { BrowserMultiFormatReader } from '@zxing/library';
   templateUrl: './business-card-import.component.html',
   styleUrl: './business-card-import.component.scss'
 })  
-export class BusinessCardImportComponent {
-  previewData: BusinessCard[] = [];
-  previewHeaders: string[] = [];   
+export class BusinessCardImportComponent { 
   scannedResult: string = ''; 
+  selectedFile: File | null = null;
   private codeReader = new BrowserMultiFormatReader();
-  constructor(private http: HttpClient,private businessCardService:BusinessCardService) {}
-
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    const fileExtension = file.name.split('.').pop().toLowerCase();
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      const content = reader.result as string;
-
-      if (fileExtension === 'csv') {
-        this.parseCSV(content);
-      } else if (fileExtension === 'xml') {
-        this.parseXML(content);
-      } else {
-        alert('Unsupported file format');
-      }
-    };
-
-    reader.readAsText(file);
-  }
-
-  parseCSV(csvData: string) {
-    Papa.parse(csvData, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (result) => {
-        this.previewData = result.data as BusinessCard[]; 
-        this.previewHeaders = Object.keys(this.previewData[0]);
-      }
-    });
-  }
-
-  parseXML(xmlData: string) {
-    xml2js.parseString(xmlData, { explicitArray: false }, (err, result) => {
-      const records = result?.Root?.Record;
-      const dataArray = Array.isArray(records) ? records : [records];
-
-      this.previewData = dataArray;
-      this.previewHeaders = Object.keys(this.previewData[0]);
-    });
-  }
- 
+  displayedColumns: string[] = ['name','gender','dob','email','phone','address','photo'];
+  dataSource = new MatTableDataSource<BusinessCard>();
+  @ViewChild(MatPaginator) paginator!: MatPaginator;  
+    
+  constructor(private http: HttpClient,private businessCardService:BusinessCardService,private router: Router) {}
   submitData() { 
-    this.previewData.forEach((x)=>{
+    this.dataSource.data.forEach((x)=>{
       x.businessCardId=0; 
     })
-        this.businessCardService.createBulk(this.previewData).subscribe({
-          next:(req)=>alert('Data submitted successfully!'),
+        this.businessCardService.createBulk(this.dataSource.data).subscribe({
+          next:(req)=>{
+            alert('Data submitted successfully!')
+            this.router.navigate(['../']);
+          },
           error: (err) => alert('Error submitting data: ' + err.message)
         }) 
   }
 
 
-  // Function to scan the QR code from an image or video stream
+  // Function to scan the QR code from an image
   scanQRCodeFromImage(file: File) {
     const reader = new FileReader();
     reader.onload = (e: any) => {
@@ -108,11 +72,11 @@ export class BusinessCardImportComponent {
           .then(result => { 
            const rawData = result.getText(); 
            const parsedList: BusinessCard[] = JSON.parse(rawData); 
-           this.previewData = parsedList.map(card => ({
+           this.dataSource.data = parsedList.map(card => ({
              ...card,
              dateOfBirth: card.dateOfBirth ? new Date(card.dateOfBirth) : undefined
            })); 
-           this.previewHeaders = Object.keys(this.previewData[0] || {});
+         //  this.previewHeaders = Object.keys(this.previewData[0] || {});
 
           })
           .catch(err => {
@@ -131,6 +95,20 @@ export class BusinessCardImportComponent {
     }
   }
 
+
+onFileSelected(event: any) {
+  this.selectedFile = event.target.files[0]; 
+  if (!this.selectedFile) return; 
+  const formData = new FormData();
+  formData.append('file', this.selectedFile); 
+  this.businessCardService.uploadFile(formData).subscribe({
+    next: (res) =>{ 
+      console.log(res) 
+      this.dataSource.data=res
+    },
+    error:(err) => alert('Error submitting data: ' + err.message)
+  });
+}
 
 }
 

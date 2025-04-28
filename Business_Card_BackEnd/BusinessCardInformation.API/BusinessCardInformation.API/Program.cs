@@ -25,6 +25,7 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+ 
 
 
 // add services and repositories registration
